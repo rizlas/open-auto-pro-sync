@@ -54,6 +54,12 @@ Check script logs using:
 
 	tail -f /tmp/bt_server.log
 
+## Application
+
+1. Download apk (https://github.com/rizlas/open-auto-pro-sync/raw/master/OpenAutoProSync.apk)
+2. Install (enable unknown sources)
+3. Grant permissions (if you want)
+
 ##  Thanks to
 
 - https://sunrise-sunset.org/api for sunrise and sunset Apis
