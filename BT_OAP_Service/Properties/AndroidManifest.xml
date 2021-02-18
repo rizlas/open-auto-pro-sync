@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+          android:versionCode="1" 
+          android:versionName="1.0" 
+          package="com.rizlas.BT_OAP_Service">
+  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
+  <application android:debuggable="true" android:allowBackup="true" android:icon="@mipmap/ic_main" android:label="@string/app_name" android:supportsRtl="true" android:theme="@style/AppTheme">
+    <service android:name=".BT_Service" android:process=":openautobt" android:debuggable="true"/>
+    <activity android:name=".MainActivity"></activity>
+  </application>
+  <uses-permission android:name="android.permission.BLUETOOTH" />
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.INTERNET" />
+</manifest>
