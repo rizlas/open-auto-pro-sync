@@ -19,6 +19,6 @@
         public const string PrefExpiresHeader = "ExpiresHeader";
         public const string PrefLastModifiedHeader = "LastModifiedHeader";
         public const string MessageReceiverFilter = "SnackMessage";
-        public const string YrForecastUserAgent = "BT_OAP_ServiceApp/1.0 https://github.com/rizlas";
+        public const string YrForecastUserAgent = "BT_OAP_ServiceApp/1.0 https://github.com/rizlas/open-auto-pro-sync";
     }
 }
