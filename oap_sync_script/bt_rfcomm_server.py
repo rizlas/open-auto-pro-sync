@@ -44,7 +44,7 @@ def update_sunrise_set(sunset: str, sunrise: str):
 
 def update_temperature(temperature: str):
     sensor_value = f"t={float(temperature) * 1000}"
-    sensor_file = "/home/pi/oap_bt/sensor"
+    sensor_file = "/opt/sensor"
 
     with open(sensor_file, "w") as f:
         f.write(sensor_value)
