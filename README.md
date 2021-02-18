@@ -38,6 +38,7 @@ sudo systemctl enable bt_rfcomm_server.service
 sudo systemctl start bt_rfcomm_server.service
 nano /home/pi/.openauto/config/openauto_system.ini 
 Change this setting <b>TemperatureSensorDescriptor=/opt/sensor</b>
+Disable ntp sync
 </pre></code>
 
 ## Troubleshooting
