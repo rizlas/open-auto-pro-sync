@@ -1,0 +1,13 @@
+[Unit]
+Description=Bluetooth RFCOMM server
+After=bluetooth.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+User=root
+ExecStart=/usr/bin/python3 /usr/local/bin/bt_rfcomm_server.py
+
+[Install]
+WantedBy=multi-user.target
