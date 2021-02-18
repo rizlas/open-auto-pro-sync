@@ -10,19 +10,19 @@ If you are a happy owner of OpenAutoPro (https://bluewavestudio.io/index.php/blu
 
 All this without even a cable (obviously you will need a smartphone with internet and bluetooth).
 
-# Time Sync
+### Time Sync
 
 Current time is retrieved directly from your phone, no internet needed.
 
-# Geolocation sunrise and sunset time
+### Geolocation sunrise and sunset time
 
 Sunrise and sunset times are provided by https://sunrise-sunset.org/ via API so any change must coop with their usage limits. If you want to update your times open the app and click "Get sunrise and sunset time".
 
-# Temperature
+### Temperature
 
 Temperature is gathered from www.yr.no API service, again here, any software modification must comply with their Terms of Service. Script will emulate a DS18B20 sensor. At the moment the data retrieved is based only on latitude and longitude, future developments will also account the altitude or variations in latitude and longitude that require an update of the data.
 
-### Script installation steps
+## Script installation steps
 
 <pre><code>cd
 sudo nano /etc/systemd/system/dbus-org.bluez.service
