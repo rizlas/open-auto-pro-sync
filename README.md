@@ -61,7 +61,7 @@ Check script logs using:
 2. Install (enable unknown sources)
 3. Grant permissions (if you want)
 
-## Troubleshooting
+### Troubleshooting
 
 Check if the service is running from 
 	
