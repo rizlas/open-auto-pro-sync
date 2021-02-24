@@ -61,6 +61,16 @@ Check script logs using:
 2. Install (enable unknown sources)
 3. Grant permissions (if you want)
 
+## Troubleshooting
+
+Check if the service is running from 
+	
+	Developer options -> Running services and you should see OpenAutoPro Sync icon
+	
+if the service is not running reboot your phone. Further investigation to try to keep the service alive are in progress.
+
+You can always sync OpenAuto Pro manually. Just open the app and click top right button.
+
 ##  Thanks to
 
 - https://sunrise-sunset.org/api for sunrise and sunset Apis
