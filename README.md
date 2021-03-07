@@ -38,7 +38,7 @@ sudo systemctl enable bt_rfcomm_server.service
 sudo systemctl start bt_rfcomm_server.service
 nano /home/pi/.openauto/config/openauto_system.ini 
 Change this setting <b>TemperatureSensorDescriptor=/opt/sensor</b>
-Disable ntp sync
+Disable ntp sync (try with sudo timedatectl set-ntp false)
 </pre></code>
 
 ## Troubleshooting
@@ -69,7 +69,7 @@ Check if the service is running from
 	
 if the service is not running reboot your phone. Further investigation to try to keep the service alive are in progress.
 
-You can always sync OpenAuto Pro manually. Just open the app and click top right button.
+You can always sync OpenAuto Pro manually. Just open the app and click top right button. This will also restart the sync service.
 
 ##  Thanks to
 
