@@ -4366,55 +4366,58 @@ namespace BT_OAP_Service
 			public const int sbGettingSunriseSunset = 2131623999;
 			
 			// aapt resource value: 0x7F0E0040
-			public const int sbLocateSuccessful = 2131624000;
+			public const int sbLatLonMissing = 2131624000;
 			
 			// aapt resource value: 0x7F0E0041
-			public const int sbNoGPSFound = 2131624001;
+			public const int sbLocateSuccessful = 2131624001;
 			
 			// aapt resource value: 0x7F0E0042
-			public const int sbPermission = 2131624002;
+			public const int sbNoGPSFound = 2131624002;
 			
 			// aapt resource value: 0x7F0E0043
-			public const int sbSomethingWrong = 2131624003;
+			public const int sbPermission = 2131624003;
 			
 			// aapt resource value: 0x7F0E0044
-			public const int sbSuccessfulSunStore = 2131624004;
+			public const int sbSomethingWrong = 2131624004;
 			
 			// aapt resource value: 0x7F0E0045
-			public const int sbSyncing = 2131624005;
+			public const int sbSuccessfulSunStore = 2131624005;
 			
 			// aapt resource value: 0x7F0E0046
-			public const int sbTaskTimeout = 2131624006;
+			public const int sbSyncing = 2131624006;
 			
 			// aapt resource value: 0x7F0E0047
-			public const int search_menu_title = 2131624007;
+			public const int sbTaskTimeout = 2131624007;
 			
 			// aapt resource value: 0x7F0E0048
-			public const int status_bar_notification_info_overflow = 2131624008;
-			
-			// aapt resource value: 0x7F0E004A
-			public const int tvSunrise = 2131624010;
-			
-			// aapt resource value: 0x7F0E004B
-			public const int tvSunset = 2131624011;
+			public const int search_menu_title = 2131624008;
 			
 			// aapt resource value: 0x7F0E0049
-			public const int tvSunSync = 2131624009;
+			public const int status_bar_notification_info_overflow = 2131624009;
 			
-			// aapt resource value: 0x7F0E004D
-			public const int tvTemperature = 2131624013;
+			// aapt resource value: 0x7F0E004B
+			public const int tvSunrise = 2131624011;
 			
 			// aapt resource value: 0x7F0E004C
-			public const int tvTempSync = 2131624012;
+			public const int tvSunset = 2131624012;
+			
+			// aapt resource value: 0x7F0E004A
+			public const int tvSunSync = 2131624010;
 			
 			// aapt resource value: 0x7F0E004E
-			public const int tvTimeSync = 2131624014;
+			public const int tvTemperature = 2131624014;
+			
+			// aapt resource value: 0x7F0E004D
+			public const int tvTempSync = 2131624013;
 			
 			// aapt resource value: 0x7F0E004F
-			public const int tvTitleSunriseSunset = 2131624015;
+			public const int tvTimeSync = 2131624015;
 			
 			// aapt resource value: 0x7F0E0050
-			public const int tvTitleSync = 2131624016;
+			public const int tvTitleSunriseSunset = 2131624016;
+			
+			// aapt resource value: 0x7F0E0051
+			public const int tvTitleSync = 2131624017;
 			
 			static String()
 			{

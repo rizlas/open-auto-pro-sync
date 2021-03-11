@@ -184,7 +184,13 @@ namespace BT_OAP_Service
         private void BtnGetSunriseSunset_Click(object sender, System.EventArgs e)
         {
             InputMethodManager InputManager = (InputMethodManager)this.GetSystemService(Context.InputMethodService);
-            InputManager.HideSoftInputFromWindow(this.CurrentFocus.WindowToken, HideSoftInputFlags.NotAlways);
+
+            var Focus = this.CurrentFocus;
+
+            if (Focus != null)
+            {
+                InputManager.HideSoftInputFromWindow(Focus.WindowToken, HideSoftInputFlags.NotAlways);
+            }
 
             if (txtLatitude.Text != string.Empty && txtLongitude.Text != string.Empty && !StoreInProgress)
             {
@@ -233,12 +239,22 @@ namespace BT_OAP_Service
                     StoreInProgress = false;
                 });
             }
+            else
+            {
+                Snackbar.Make(MainLayout, Resource.String.sbLatLonMissing, Snackbar.LengthIndefinite).SetAction("OK", (View) => { }).Show();
+            }
         }
 
         private void BtnLocate_Click(object sender, System.EventArgs e)
         {
             InputMethodManager InputManager = (InputMethodManager)this.GetSystemService(Context.InputMethodService);
-            InputManager.HideSoftInputFromWindow(this.CurrentFocus.WindowToken, HideSoftInputFlags.NotAlways);
+
+            var Focus = this.CurrentFocus;
+            
+            if (Focus != null)
+            {
+                InputManager.HideSoftInputFromWindow(Focus.WindowToken, HideSoftInputFlags.NotAlways);
+            }
 
             AlertDialog.Builder ProgressAlertDialogBuilder = new AlertDialog.Builder(this);
             View frame = LayoutInflater.Inflate(Resource.Layout.pb_IndeterminateWithHorizontalText, MainLayout, false);

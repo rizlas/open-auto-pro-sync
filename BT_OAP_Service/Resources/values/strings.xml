@@ -18,6 +18,7 @@
   <string name="tvTempSync">Temperature: None</string>
   <string name="sbSuccessfulSunStore">Sunrise and sunset time stored</string>
   <string name="sbSomethingWrong">Something went wrong</string>
+  <string name="sbLatLonMissing">Latitude and longitude are missing</string>
   <string name="sbPermission">To change the permissions go to settings</string>
   <string name="sbEnableLocationPermission">Enable location permissions from settings first</string>
   <string name="sbEnableGPS">Your GPS is currently disabled, please enable it</string>
