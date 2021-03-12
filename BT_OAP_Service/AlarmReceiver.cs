@@ -36,11 +36,13 @@ namespace BT_OAP_Service
 
                 if (Latitude != string.Empty && Longitude != string.Empty)
                 {
-                    RestClient Client = new RestClient("https://api.met.no/weatherapi/locationforecast/2.0/compact?");
+                    RestClient Client = new RestClient("https://api.met.no/weatherapi/locationforecast/2.0/compact");
                     RestRequest Request = new RestRequest(Method.GET);
-                    Request.AddParameter("lat", Utils.RetrievePreference(Constants.PrefLatitude));
-                    Request.AddParameter("lon", Utils.RetrievePreference(Constants.PrefLongitude));
+                    Request.AddParameter("lat", Latitude);
+                    Request.AddParameter("lon", Longitude);
                     Request.AddHeader("User-Agent", Constants.YrForecastUserAgent);
+
+                    string FullUrl = Client.BuildUri(Request).ToString();
 
                     string LastModifiedHeader = Utils.RetrievePreference(Constants.PrefLastModifiedHeader);
 
@@ -101,11 +103,11 @@ namespace BT_OAP_Service
                                 SbHeaders.AppendLine(H.ToString());
                             }
 
-                            log.Error($"StatusCode: {Response.StatusCode} Headers:{Environment.NewLine}{SbHeaders} FullUrl: {Client.BuildUri(Request)} Response ErrorMessage: {Response.ErrorMessage}");
+                            log.Error($"StatusCode: {Response.StatusCode} Headers:{Environment.NewLine}{SbHeaders} FullUrl: {FullUrl} Response ErrorMessage: {Response.ErrorMessage}");
                         }
                         else
                         {
-                            log.Error($"Response ErrorMessage: {Response.ErrorMessage}");
+                            log.Error($"Response ErrorMessage: {Response.ErrorMessage} FullUrl: {FullUrl}");
                         }
                     });
                 }

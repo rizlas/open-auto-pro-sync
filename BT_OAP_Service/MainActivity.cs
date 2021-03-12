@@ -198,10 +198,13 @@ namespace BT_OAP_Service
                 string Longitude = TruncateLatitudeLongitude(double.Parse(txtLongitude.Text, CultureInfo.InvariantCulture));
 
                 StoreInProgress = true;
-                RestClient Client = new RestClient("https://api.sunrise-sunset.org/json?");
+                RestClient Client = new RestClient("https://api.sunrise-sunset.org/json");
                 RestRequest Request = new RestRequest(Method.GET);
                 Request.AddParameter("lat", Latitude);
                 Request.AddParameter("lng", Longitude);
+
+                string FullUrl = Client.BuildUri(Request).ToString();
+
                 Snackbar.Make(MainLayout, Resource.String.sbGettingSunriseSunset, Snackbar.LengthLong).Show();
 
                 Task.Run(async () =>
@@ -226,11 +229,11 @@ namespace BT_OAP_Service
                     {
                         if (Response.StatusCode != 0)
                         {
-                            log.Error($"StatusCode: {Response.StatusCode} Data: {Response.Data.Status} FullUrl: {Client.BuildUri(Request)} Response ErrorMessage: {Response.ErrorMessage}");
+                            log.Error($"StatusCode: {Response.StatusCode} Data: {Response.Data.Status} FullUrl: {FullUrl} Response ErrorMessage: {Response.ErrorMessage}");
                         }
                         else
                         {
-                            log.Error($"Response ErrorMessage: {Response.ErrorMessage} StatusCode: {Response.StatusCode}");
+                            log.Error($"Response ErrorMessage: {Response.ErrorMessage} StatusCode: {Response.StatusCode} FullUrl: {FullUrl}");
                         }
 
                         Snackbar.Make(MainLayout, Resource.String.sbSomethingWrong, Snackbar.LengthIndefinite).SetAction("OK", (View) => { }).Show();
