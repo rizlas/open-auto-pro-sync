@@ -21,13 +21,21 @@ Sunrise and sunset times are provided by https://sunrise-sunset.org/ via API so 
 ### Temperature
 
 Temperature is gathered from www.yr.no API service, again here, any software modification must comply with their Terms of Service. Script will emulate a DS18B20 sensor. At the moment the data retrieved is based only on latitude and longitude, future developments will also account the altitude or variations in latitude and longitude that require an update of the data.
+## Automatic service setup
+<pre><code>
+Enter in the root of the repo:
+<b>cd ~/open-auto-pro-sync</b>
+Run the script:
+<b>./setup-bt-services.sh</b>
+</pre></code>
+## Manual script installation steps
 
-## Script installation steps
-
-<pre><code>cd
+<pre><code>cd ~
 sudo nano /etc/systemd/system/dbus-org.bluez.service
-Add <b>-c</b> option at the end of ExecStart parameter
-Add <b>ExecStartPost=usr/bin/sdptool add SP</b> line after ExecStart
+Add 
+<b>-c</b> option at the end of ExecStart parameter
+Add: <b>ExecStartPost=/usr/bin/sdptool add SP</b> 
+after ExecStart
 sudo pip3 install pybluez
 git clone --branch python-script https://github.com/rizlas/open-auto-pro-sync
 cd open-auto-pro-sync/oap_sync_script
