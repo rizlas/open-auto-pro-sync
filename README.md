@@ -32,9 +32,8 @@ Run the script:
 
 <pre><code>cd ~
 sudo nano /etc/systemd/system/dbus-org.bluez.service
-Add 
-<b>-c</b> option at the end of ExecStart parameter
-Add: <b>ExecStartPost=/usr/bin/sdptool add SP</b> 
+Add <b>"-c"</b> option at the end of ExecStart parameter
+Add: <b>"ExecStartPost=/usr/bin/sdptool add SP"</b> 
 after ExecStart
 sudo pip3 install pybluez
 git clone --branch python-script https://github.com/rizlas/open-auto-pro-sync
@@ -45,7 +44,7 @@ sudo cp bt_rfcomm_server.service /etc/systemd/system
 sudo systemctl enable bt_rfcomm_server.service
 sudo systemctl start bt_rfcomm_server.service
 nano /home/pi/.openauto/config/openauto_system.ini 
-Change this setting <b>TemperatureSensorDescriptor=/opt/sensor</b>
+Change this setting <b>"TemperatureSensorDescriptor=/opt/sensor"</b>
 Disable ntp sync (try with sudo timedatectl set-ntp false)
 </pre></code>
 
