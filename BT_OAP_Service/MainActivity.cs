@@ -198,6 +198,7 @@ namespace BT_OAP_Service
                 string Longitude = TruncateLatitudeLongitude(double.Parse(txtLongitude.Text, CultureInfo.InvariantCulture));
 
                 StoreInProgress = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 RestClient Client = new RestClient("https://api.sunrise-sunset.org/json");
                 RestRequest Request = new RestRequest(Method.GET);
                 Request.AddParameter("lat", Latitude);
