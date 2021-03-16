@@ -36,7 +36,6 @@ namespace BT_OAP_Service
 
                 if (Latitude != string.Empty && Longitude != string.Empty)
                 {
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                     RestClient Client = new RestClient("https://api.met.no/weatherapi/locationforecast/2.0/compact");
                     RestRequest Request = new RestRequest(Method.GET);
                     Request.AddParameter("lat", Latitude);
