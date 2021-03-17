@@ -16,7 +16,7 @@ Current time is retrieved directly from your phone, no internet needed.
 
 ### Geolocation sunrise and sunset time
 
-Sunrise and sunset times are provided by https://sunrise-sunset.org/ via API so any change must coop with their usage limits. If you want to update your times open the app and click "Get sunrise and sunset time".
+Sunrise and sunset times are provided by www.yr.no via API so any change must coop with their usage limits. If you want to update your times open the app and click "Get sunrise and sunset time".
 
 ### Temperature
 
@@ -80,7 +80,6 @@ You can always sync OpenAuto Pro manually. Just open the app and click top right
 
 ##  Thanks to
 
-- https://sunrise-sunset.org/api for sunrise and sunset Apis
 - https://developer.yr.no/ for meteorological Apis
 - https://github.com/pybluez/pybluez for rfcomm bluetooth server
 - Icon made by smalllikeart from www.flaticon.com
