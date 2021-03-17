@@ -33,8 +33,7 @@ Run the script:
 <pre><code>cd ~
 sudo nano /etc/systemd/system/dbus-org.bluez.service
 Add <b>"-c"</b> option at the end of ExecStart parameter
-Add: <b>"ExecStartPost=/usr/bin/sdptool add SP"</b> 
-after ExecStart
+Add: <b>"ExecStartPost=/usr/bin/sdptool add SP"</b> after ExecStart
 sudo pip3 install pybluez
 git clone --branch python-script https://github.com/rizlas/open-auto-pro-sync
 cd open-auto-pro-sync/oap_sync_script
