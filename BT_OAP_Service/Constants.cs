@@ -14,6 +14,7 @@
         public const string PrefTimeSync = "TimeSync";
         public const string PrefSunTimeSync = "SunTimeSync";
         public const string PrefTempSync = "TemperatureSync";
+        public const string PrefFirstRunEver = "FirstRunEver";
         public const string PrefTempTimeRetrieved = "TemperatureTimeRetrieved";
         public const string PrefExpiresHeader = "ExpiresHeader";
         public const string PrefLastModifiedHeader = "LastModifiedHeader";

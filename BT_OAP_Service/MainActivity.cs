@@ -77,6 +77,13 @@ namespace BT_OAP_Service
             RequiredPermissions = new string[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.WriteExternalStorage };
             MessagesReceiver = new MessageReceiver(MainLayout);
 
+            //This should be run only the first time the app is open ever
+            if (Utils.RetrievePreference(Constants.PrefFirstRunEver) == string.Empty)
+            {
+                Utils.AlarmSetup(this.ApplicationContext);
+                Utils.StorePreference(Constants.PrefFirstRunEver, "Done");
+            }
+
             if (!HasPermissions())
             {
                 ActivityCompat.RequestPermissions(this, RequiredPermissions, Constants.PermissionRequestAll);

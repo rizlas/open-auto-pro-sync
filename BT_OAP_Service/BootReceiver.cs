@@ -14,11 +14,7 @@ namespace BT_OAP_Service
         {
             log.Debug($"OnReceive, triggered by: {intent.Action}");
 
-            AlarmManager Manager = (AlarmManager)context.GetSystemService(Context.AlarmService);
-            Intent AlarmIntent = new Intent(context, typeof(AlarmReceiver));
-            PendingIntent AlarmPendingIntent = PendingIntent.GetBroadcast(context, 0, AlarmIntent, 0);
-
-            Manager.SetRepeating(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime(), AlarmManager.IntervalHalfHour, AlarmPendingIntent);
+            Utils.AlarmSetup(context);
         }
     }
 }

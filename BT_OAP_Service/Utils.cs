@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.OS;
 using Android.Preferences;
 using NLog;
 
@@ -33,6 +34,15 @@ namespace BT_OAP_Service
             BtIntent.PutExtra(ExtraKey, true);
 
             Context.SendBroadcast(BtIntent);
+        }
+
+        public static void AlarmSetup(Context Context)
+        {
+            AlarmManager Manager = (AlarmManager)Context.GetSystemService(Context.AlarmService);
+            Intent AlarmIntent = new Intent(Context, typeof(AlarmReceiver));
+            PendingIntent AlarmPendingIntent = PendingIntent.GetBroadcast(Context, 0, AlarmIntent, 0);
+
+            Manager.SetRepeating(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime(), AlarmManager.IntervalHalfHour, AlarmPendingIntent);
         }
     }
 }
