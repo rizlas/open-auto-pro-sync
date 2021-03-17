@@ -77,14 +77,6 @@ namespace BT_OAP_Service
             RequiredPermissions = new string[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.WriteExternalStorage };
             MessagesReceiver = new MessageReceiver(MainLayout);
 
-            //This should be run only the first time the app is open ever
-            if (Utils.RetrievePreference(Constants.PrefFirstRunEver) == string.Empty)
-            {
-                StartService();
-
-                Utils.StorePreference(Constants.PrefFirstRunEver, "Done");
-            }
-
             if (!HasPermissions())
             {
                 ActivityCompat.RequestPermissions(this, RequiredPermissions, Constants.PermissionRequestAll);
@@ -112,7 +104,6 @@ namespace BT_OAP_Service
                 Snackbar.Make(MainLayout, Resource.String.sbSyncing, Snackbar.LengthLong).Show();
 
                 Utils.Sync(this.ApplicationContext, "SyncAll");
-                StartService();
                 return true;
             }
 
@@ -439,20 +430,6 @@ namespace BT_OAP_Service
         {
             // Only 4 digit, no rounding
             return (Math.Truncate(Value * 10000) / 10000).ToString(CultureInfo.InvariantCulture);
-        }
-
-        private void StartService()
-        {
-            Intent ServiceIntent = new Intent(this.ApplicationContext, typeof(OapService));
-
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-            {
-                this.ApplicationContext.StartForegroundService(ServiceIntent);
-            }
-            else
-            {
-                this.ApplicationContext.StartService(ServiceIntent);
-            }
         }
 
         [BroadcastReceiver(Enabled = true, Exported = false)]

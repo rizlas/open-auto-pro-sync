@@ -10,10 +10,12 @@ using Android.OS;
 using Newtonsoft.Json;
 using System.Globalization;
 using Android.Support.V4.Content;
+using Android.App;
 
 namespace BT_OAP_Service
 {
-    [BroadcastReceiver(Enabled = true, Exported = false)]
+    [BroadcastReceiver(Enabled = true)]
+    [IntentFilter(new[] { BluetoothDevice.ActionAclConnected })]
     class BtReceiver : BroadcastReceiver
     {
         private static readonly Logger log = LogManager.GetCurrentClassLogger();

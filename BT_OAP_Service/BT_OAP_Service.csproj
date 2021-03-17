@@ -79,7 +79,6 @@
     <Compile Include="OapSync.cs" />
     <Compile Include="OapSyncResponse.cs" />
     <Compile Include="YrSunriseSunset.cs" />
-    <Compile Include="OapService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils.cs" />

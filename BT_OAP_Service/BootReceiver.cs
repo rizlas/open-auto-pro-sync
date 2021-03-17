@@ -14,16 +14,11 @@ namespace BT_OAP_Service
         {
             log.Debug($"OnReceive, triggered by: {intent.Action}");
 
-            Intent ServiceIntent = new Intent(context, typeof(OapService));
+            AlarmManager Manager = (AlarmManager)context.GetSystemService(Context.AlarmService);
+            Intent AlarmIntent = new Intent(context, typeof(AlarmReceiver));
+            PendingIntent AlarmPendingIntent = PendingIntent.GetBroadcast(context, 0, AlarmIntent, 0);
 
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-            {
-                context.StartForegroundService(ServiceIntent);
-            }
-            else
-            {
-                context.StartService(ServiceIntent);
-            }
+            Manager.SetRepeating(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime(), AlarmManager.IntervalHalfHour, AlarmPendingIntent);
         }
     }
 }
