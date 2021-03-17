@@ -5,7 +5,7 @@
         public const int PermissionRequestLocation = 1;
         public const int PermissionRequestAll = 12;
         public const long BtThresholdTrigger = 10000;   // millisecond
-        public const int TokenLocationTimeout = 90000;   // millisecond
+        public const int TokenLocationTimeout = 120000;   // millisecond
         public const string PrefLatitude = "Latitude";
         public const string PrefLongitude = "Longitude";
         public const string PrefTemperature = "Temperature";
@@ -18,6 +18,7 @@
         public const string PrefTempTimeRetrieved = "TemperatureTimeRetrieved";
         public const string PrefExpiresHeader = "ExpiresHeader";
         public const string PrefLastModifiedHeader = "LastModifiedHeader";
+        public const string PrefLastModifiedHeaderSunTime = "LastModifiedHeaderSunTime";
         public const string MessageReceiverFilter = "SnackMessage";
         public const string YrForecastUserAgent = "BT_OAP_ServiceApp/1.0 https://github.com/rizlas/open-auto-pro-sync";
     }

@@ -26,6 +26,8 @@ using Android.Views;
 using Android.Support.V4.Content;
 using Android.Views.Animations;
 using Android.Support.V7.View.Menu;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace BT_OAP_Service
 {
@@ -184,28 +186,59 @@ namespace BT_OAP_Service
         private void BtnGetSunriseSunset_Click(object sender, System.EventArgs e)
         {
             InputMethodManager InputManager = (InputMethodManager)this.GetSystemService(Context.InputMethodService);
-            InputManager.HideSoftInputFromWindow(this.CurrentFocus.WindowToken, HideSoftInputFlags.NotAlways);
+
+            var Focus = this.CurrentFocus;
+
+            if (Focus != null)
+            {
+                InputManager.HideSoftInputFromWindow(Focus.WindowToken, HideSoftInputFlags.NotAlways);
+            }
 
             if (txtLatitude.Text != string.Empty && txtLongitude.Text != string.Empty && !StoreInProgress)
             {
                 string Latitude = TruncateLatitudeLongitude(double.Parse(txtLatitude.Text, CultureInfo.InvariantCulture));
                 string Longitude = TruncateLatitudeLongitude(double.Parse(txtLongitude.Text, CultureInfo.InvariantCulture));
+                var Offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
 
                 StoreInProgress = true;
-                RestClient Client = new RestClient("https://api.sunrise-sunset.org/json?");
+
+                RestClient Client = new RestClient("https://api.met.no/weatherapi/sunrise/2.0/.json");
                 RestRequest Request = new RestRequest(Method.GET);
                 Request.AddParameter("lat", Latitude);
-                Request.AddParameter("lng", Longitude);
+                Request.AddParameter("lon", Longitude);
+                Request.AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
+                Request.AddParameter("offset", $"{(Offset < TimeSpan.Zero ? "-" : "+")}{Offset:hh\\:mm}");
+                Request.AddHeader("User-Agent", Constants.YrForecastUserAgent);
+
+                string FullUrl = Client.BuildUri(Request).ToString();
+
+                string LastModifiedHeader = Utils.RetrievePreference(Constants.PrefLastModifiedHeaderSunTime);
+
+                if (LastModifiedHeader != string.Empty)
+                {
+                    Request.AddHeader("If-Modified-Since", LastModifiedHeader);
+                }
+
                 Snackbar.Make(MainLayout, Resource.String.sbGettingSunriseSunset, Snackbar.LengthLong).Show();
 
                 Task.Run(async () =>
                 {
-                    IRestResponse<SunriseSunset> Response = await Client.ExecuteAsync<SunriseSunset>(Request);
+                    IRestResponse Response = await Client.ExecuteAsync(Request);
 
-                    if (Response.StatusCode == HttpStatusCode.OK && Response.Data.Status == "OK")
+                    if (Response.StatusCode == HttpStatusCode.OK)
                     {
-                        string Sunrise = DateTime.Parse(Response.Data.Results.Sunrise).ToLocalTime().ToString("H:mm");
-                        string Sunset = DateTime.Parse(Response.Data.Results.Sunset).ToLocalTime().ToString("H:mm");
+                        YrSunriseSunset SunriseSunset = JsonConvert.DeserializeObject<YrSunriseSunset>(Response.Content);
+                        // No polar day handling, if someone will ever use this in polar region please drop me a pm to fix this
+                        string Sunrise = SunriseSunset.Location.Time[0].Sunrise.Time.ToString("H:mm");
+                        string Sunset = SunriseSunset.Location.Time[0].Sunset.Time.ToString("H:mm");
+
+                        foreach (var H in Response.Headers)
+                        {
+                            if (H.Name == "Last-Modified")
+                            {
+                                Utils.StorePreference(Constants.PrefLastModifiedHeaderSunTime, H.Value.ToString());
+                            }
+                        }
 
                         Utils.StorePreference(Constants.PrefSunrise, Sunrise);
                         Utils.StorePreference(Constants.PrefSunset, Sunset);
@@ -216,15 +249,27 @@ namespace BT_OAP_Service
 
                         Snackbar.Make(MainLayout, Resource.String.sbSuccessfulSunStore, Snackbar.LengthLong).Show();
                     }
+                    else if (Response.StatusCode == HttpStatusCode.NotModified)
+                    {
+                        log.Debug("Yr SunriseSunset Not Modified"); 
+                        Utils.Sync(this.ApplicationContext, "SyncSunTime");
+                    }
                     else
                     {
                         if (Response.StatusCode != 0)
                         {
-                            log.Error($"StatusCode: {Response.StatusCode} Data: {Response.Data.Status} FullUrl: {Client.BuildUri(Request)} Response ErrorMessage: {Response.ErrorMessage}");
+                            StringBuilder SbHeaders = new StringBuilder();
+
+                            foreach (var H in Response.Headers)
+                            {
+                                SbHeaders.AppendLine(H.ToString());
+                            }
+
+                            log.Error($"StatusCode: {Response.StatusCode} Headers:{System.Environment.NewLine}{SbHeaders} FullUrl: {FullUrl} Response ErrorMessage: {Response.ErrorMessage}");
                         }
                         else
                         {
-                            log.Error($"Response ErrorMessage: {Response.ErrorMessage} StatusCode: {Response.StatusCode}");
+                            log.Error($"Response ErrorMessage: {Response.ErrorMessage} StatusCode: {Response.StatusCode} FullUrl: {FullUrl}");
                         }
 
                         Snackbar.Make(MainLayout, Resource.String.sbSomethingWrong, Snackbar.LengthIndefinite).SetAction("OK", (View) => { }).Show();
@@ -233,12 +278,22 @@ namespace BT_OAP_Service
                     StoreInProgress = false;
                 });
             }
+            else
+            {
+                Snackbar.Make(MainLayout, Resource.String.sbLatLonMissing, Snackbar.LengthIndefinite).SetAction("OK", (View) => { }).Show();
+            }
         }
 
         private void BtnLocate_Click(object sender, System.EventArgs e)
         {
             InputMethodManager InputManager = (InputMethodManager)this.GetSystemService(Context.InputMethodService);
-            InputManager.HideSoftInputFromWindow(this.CurrentFocus.WindowToken, HideSoftInputFlags.NotAlways);
+
+            var Focus = this.CurrentFocus;
+            
+            if (Focus != null)
+            {
+                InputManager.HideSoftInputFromWindow(Focus.WindowToken, HideSoftInputFlags.NotAlways);
+            }
 
             AlertDialog.Builder ProgressAlertDialogBuilder = new AlertDialog.Builder(this);
             View frame = LayoutInflater.Inflate(Resource.Layout.pb_IndeterminateWithHorizontalText, MainLayout, false);
