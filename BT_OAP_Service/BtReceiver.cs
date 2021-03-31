@@ -10,10 +10,12 @@ using Android.OS;
 using Newtonsoft.Json;
 using System.Globalization;
 using Android.Support.V4.Content;
+using Android.App;
 
 namespace BT_OAP_Service
 {
-    [BroadcastReceiver(Enabled = true, Exported = false)]
+    [BroadcastReceiver(Enabled = true)]
+    [IntentFilter(new[] { BluetoothDevice.ActionAclConnected })]
     class BtReceiver : BroadcastReceiver
     {
         private static readonly Logger log = LogManager.GetCurrentClassLogger();
@@ -27,6 +29,19 @@ namespace BT_OAP_Service
             if (SystemClock.ElapsedRealtime() - LastTriggerTime > Constants.BtThresholdTrigger)
             {
                 LastTriggerTime = SystemClock.ElapsedRealtime();
+
+                DateTime SunTimeAge = DateTime.Parse(Utils.RetrievePreference(Constants.PrefSunTimeAge));
+
+                if (System.Math.Abs((DateTime.Now - SunTimeAge).Days) > 6)
+                {
+                    string Latitude = Utils.RetrievePreference(Constants.PrefLatitude);
+                    string Longitude = Utils.RetrievePreference(Constants.PrefLongitude);
+
+                    if(Latitude != string.Empty && Longitude != string.Empty)
+                    {
+                        Utils.GetSunriseSunset(Latitude, Longitude, context);
+                    }
+                }
 
                 // Maybe a cancellation token for this task could be a good idea
                 Task.Run(async () =>

@@ -14,16 +14,7 @@ namespace BT_OAP_Service
         {
             log.Debug($"OnReceive, triggered by: {intent.Action}");
 
-            Intent ServiceIntent = new Intent(context, typeof(OapService));
-
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-            {
-                context.StartForegroundService(ServiceIntent);
-            }
-            else
-            {
-                context.StartService(ServiceIntent);
-            }
+            Utils.AlarmSetup(context);
         }
     }
 }
