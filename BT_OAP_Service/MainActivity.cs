@@ -47,7 +47,6 @@ namespace BT_OAP_Service
         private TextView tvSunSync;
         private TextView tvTempSync;
         private string[] RequiredPermissions;
-        private bool StoreInProgress;
         private AlertDialog ProgressAlertDialog;
         private CancellationTokenSource Source;
         private MessageReceiver MessagesReceiver;
@@ -192,89 +191,14 @@ namespace BT_OAP_Service
                 InputManager.HideSoftInputFromWindow(Focus.WindowToken, HideSoftInputFlags.NotAlways);
             }
 
-            if (txtLatitude.Text != string.Empty && txtLongitude.Text != string.Empty && !StoreInProgress)
+            if (txtLatitude.Text != string.Empty && txtLongitude.Text != string.Empty)
             {
                 string Latitude = TruncateLatitudeLongitude(double.Parse(txtLatitude.Text, CultureInfo.InvariantCulture));
                 string Longitude = TruncateLatitudeLongitude(double.Parse(txtLongitude.Text, CultureInfo.InvariantCulture));
-                var Offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
-
-                StoreInProgress = true;
-
-                RestClient Client = new RestClient("https://api.met.no/weatherapi/sunrise/2.0/.json");
-                RestRequest Request = new RestRequest(Method.GET);
-                Request.AddParameter("lat", Latitude);
-                Request.AddParameter("lon", Longitude);
-                Request.AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
-                Request.AddParameter("offset", $"{(Offset < TimeSpan.Zero ? "-" : "+")}{Offset:hh\\:mm}");
-                Request.AddHeader("User-Agent", Constants.YrForecastUserAgent);
-
-                string FullUrl = Client.BuildUri(Request).ToString();
-
-                string LastModifiedHeader = Utils.RetrievePreference(Constants.PrefLastModifiedHeaderSunTime);
-
-                if (LastModifiedHeader != string.Empty)
-                {
-                    Request.AddHeader("If-Modified-Since", LastModifiedHeader);
-                }
 
                 Snackbar.Make(MainLayout, Resource.String.sbGettingSunriseSunset, Snackbar.LengthLong).Show();
 
-                Task.Run(async () =>
-                {
-                    IRestResponse Response = await Client.ExecuteAsync(Request);
-
-                    if (Response.StatusCode == HttpStatusCode.OK)
-                    {
-                        YrSunriseSunset SunriseSunset = JsonConvert.DeserializeObject<YrSunriseSunset>(Response.Content);
-                        // No polar day handling, if someone will ever use this in polar region please drop me a pm to fix this
-                        string Sunrise = SunriseSunset.Location.Time[0].Sunrise.Time.ToString("H:mm");
-                        string Sunset = SunriseSunset.Location.Time[0].Sunset.Time.ToString("H:mm");
-
-                        foreach (var H in Response.Headers)
-                        {
-                            if (H.Name == "Last-Modified")
-                            {
-                                Utils.StorePreference(Constants.PrefLastModifiedHeaderSunTime, H.Value.ToString());
-                            }
-                        }
-
-                        Utils.StorePreference(Constants.PrefSunrise, Sunrise);
-                        Utils.StorePreference(Constants.PrefSunset, Sunset);
-                        Utils.StorePreference(Constants.PrefLatitude, Latitude);
-                        Utils.StorePreference(Constants.PrefLongitude, Longitude);
-
-                        Utils.Sync(this.ApplicationContext, "SyncSunTime");
-
-                        Snackbar.Make(MainLayout, Resource.String.sbSuccessfulSunStore, Snackbar.LengthLong).Show();
-                    }
-                    else if (Response.StatusCode == HttpStatusCode.NotModified)
-                    {
-                        log.Debug("Yr SunriseSunset Not Modified"); 
-                        Utils.Sync(this.ApplicationContext, "SyncSunTime");
-                    }
-                    else
-                    {
-                        if (Response.StatusCode != 0)
-                        {
-                            StringBuilder SbHeaders = new StringBuilder();
-
-                            foreach (var H in Response.Headers)
-                            {
-                                SbHeaders.AppendLine(H.ToString());
-                            }
-
-                            log.Error($"StatusCode: {Response.StatusCode} Headers:{System.Environment.NewLine}{SbHeaders} FullUrl: {FullUrl} Response ErrorMessage: {Response.ErrorMessage}");
-                        }
-                        else
-                        {
-                            log.Error($"Response ErrorMessage: {Response.ErrorMessage} StatusCode: {Response.StatusCode} FullUrl: {FullUrl}");
-                        }
-
-                        Snackbar.Make(MainLayout, Resource.String.sbSomethingWrong, Snackbar.LengthIndefinite).SetAction("OK", (View) => { }).Show();
-                    }
-
-                    StoreInProgress = false;
-                });
+                Utils.GetSunriseSunset(Latitude, Longitude, this.ApplicationContext);
             }
             else
             {
@@ -314,13 +238,23 @@ namespace BT_OAP_Service
                     Source = new CancellationTokenSource(Constants.TokenLocationTimeout);
                     Source.Token.Register(OnCancellationRequest);
 
-                    GeolocationRequest Request = new GeolocationRequest(GeolocationAccuracy.Default);
-                    var Location = await Geolocation.GetLocationAsync(Request, Source.Token);
+                    var Location = await Geolocation.GetLastKnownLocationAsync();
 
-                    if (Location != null)
+                    if (Location != null && Location.Timestamp.AddMinutes(10) > DateTime.Now)
                     {
                         Utils.StorePreference(Constants.PrefLatitude, TruncateLatitudeLongitude(Location.Latitude));
                         Utils.StorePreference(Constants.PrefLongitude, TruncateLatitudeLongitude(Location.Longitude));
+                    }
+                    else
+                    {
+                        GeolocationRequest Request = new GeolocationRequest(GeolocationAccuracy.Default);
+                        Location = await Geolocation.GetLocationAsync(Request, Source.Token);
+
+                        if (Location != null)
+                        {
+                            Utils.StorePreference(Constants.PrefLatitude, TruncateLatitudeLongitude(Location.Latitude));
+                            Utils.StorePreference(Constants.PrefLongitude, TruncateLatitudeLongitude(Location.Longitude));
+                        }
                     }
 
                     // Side note for a feature, continuos location need to sync also sunrise and sunset

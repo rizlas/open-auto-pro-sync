@@ -30,6 +30,19 @@ namespace BT_OAP_Service
             {
                 LastTriggerTime = SystemClock.ElapsedRealtime();
 
+                DateTime SunTimeAge = DateTime.Parse(Utils.RetrievePreference(Constants.PrefSunTimeAge));
+
+                if (System.Math.Abs((DateTime.Now - SunTimeAge).Days) > 6)
+                {
+                    string Latitude = Utils.RetrievePreference(Constants.PrefLatitude);
+                    string Longitude = Utils.RetrievePreference(Constants.PrefLongitude);
+
+                    if(Latitude != string.Empty && Longitude != string.Empty)
+                    {
+                        Utils.GetSunriseSunset(Latitude, Longitude, context);
+                    }
+                }
+
                 // Maybe a cancellation token for this task could be a good idea
                 Task.Run(async () =>
                 {
