@@ -85,7 +85,7 @@ You can always sync OpenAuto Pro manually. Just open the app and click top right
 - https://bluewavestudio.io/ for OpenAutoPro
 
 
-Fell free to make pull requests, fork, destroy or whatever you like most. Any criticism is more than welcome.
+Feel free to make pull requests, fork, destroy or whatever you like most. Any criticism is more than welcome.
 
 <br/>
 <p align="center">
